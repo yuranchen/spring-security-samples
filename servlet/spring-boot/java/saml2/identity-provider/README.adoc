@@ -1,0 +1,13 @@
+= A Sample Identity Provider
+
+This sample by default uses Docker to stand up two sample IdPs, each with one asserting party and multiple relying parties registered.
+This allows you to explore different arrangements between multiple relying parties and asserting parties.
+
+To ensure that there are no issues with sharing cookies between the Identity Provider and Service Provider applications, the application uses `nip.io` hostnames.
+The first identity provider can be reached by navigating to `http://idp-one.7f000001.nip.io`.
+The second identity provider can be reached by navigating to `http://idp-two.7f000001.nip.io`.
+
+To change how the IdP is configured, you can go to the sibling `identity-provider` project and edit the following files:
+
+* `one-relyingparties.php` - the list of relying parties that `idp-one` knows about
+* `two-relyingparties.php` - the list of relying parties that `idp-two` knows about

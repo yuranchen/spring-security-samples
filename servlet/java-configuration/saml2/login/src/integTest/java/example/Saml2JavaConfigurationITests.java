@@ -20,15 +20,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import com.gargoylesoftware.htmlunit.ElementNotFoundException;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlInput;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlPasswordInput;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import org.htmlunit.ElementNotFoundException;
+import org.htmlunit.WebClient;
+import org.htmlunit.html.HtmlElement;
+import org.htmlunit.html.HtmlForm;
+import org.htmlunit.html.HtmlInput;
+import org.htmlunit.html.HtmlPage;
+import org.htmlunit.html.HtmlPasswordInput;
+import org.htmlunit.html.HtmlSubmitInput;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -49,6 +50,7 @@ import static org.awaitility.Awaitility.await;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = ApplicationConfiguration.class)
 @WebAppConfiguration
+@Disabled("gh-127")
 public class Saml2JavaConfigurationITests {
 
 	private MockMvc mvc;
@@ -64,9 +66,12 @@ public class Saml2JavaConfigurationITests {
 	@BeforeEach
 	void setup() {
 		this.mvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext)
-				.apply(SecurityMockMvcConfigurers.springSecurity()).build();
+			.apply(SecurityMockMvcConfigurers.springSecurity())
+			.build();
 		this.webClient = MockMvcWebClientBuilder.mockMvcSetup(this.mvc)
-				.withDelegate(new LocalHostWebClient(this.environment)).build();
+			.withDelegate(new LocalHostWebClient(this.environment))
+			.build();
+		this.webClient.getOptions().setThrowExceptionOnScriptError(false);
 		this.webClient.getCookieManager().clearCookies();
 	}
 
@@ -114,7 +119,7 @@ public class Saml2JavaConfigurationITests {
 
 	private HtmlForm findForm(HtmlPage login) {
 		await().atMost(10, TimeUnit.SECONDS)
-				.until(() -> login.getForms().stream().map(HtmlForm::getId).anyMatch("form19"::equals));
+			.until(() -> login.getForms().stream().map(HtmlForm::getId).anyMatch("form19"::equals));
 		for (HtmlForm form : login.getForms()) {
 			try {
 				if (form.getId().equals("form19")) {

@@ -1,12 +1,14 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.1.4'
-	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	alias(libs.plugins.org.springframework.boot)
+	alias(libs.plugins.io.spring.dependency.management)
 	id "nebula.integtest" version "8.2.0"
 }
 
 repositories {
 	mavenCentral()
+	maven { url "https://repo.spring.io/milestone" }
+	maven { url "https://repo.spring.io/snapshot" }
 }
 
 dependencies {
@@ -18,5 +20,5 @@ dependencies {
 
 tasks.withType(Test).configureEach {
 	useJUnitPlatform()
-	outputs.upToDateWhen { false }
+	
 }

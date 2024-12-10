@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2019 the original author or authors.
+ * Copyright 2002-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package example;
 
 import java.net.URI;
@@ -27,13 +28,13 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.WebResponse;
-import com.gargoylesoftware.htmlunit.html.DomNodeList;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.htmlunit.FailingHttpStatusCodeException;
+import org.htmlunit.WebClient;
+import org.htmlunit.WebResponse;
+import org.htmlunit.html.DomNodeList;
+import org.htmlunit.html.HtmlAnchor;
+import org.htmlunit.html.HtmlElement;
+import org.htmlunit.html.HtmlPage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -143,12 +144,12 @@ public class OAuth2LoginApplicationTests {
 		Map<String, String> params = uriComponents.getQueryParams().toSingleValueMap();
 
 		assertThat(params.get(OAuth2ParameterNames.RESPONSE_TYPE))
-				.isEqualTo(OAuth2AuthorizationResponseType.CODE.getValue());
+			.isEqualTo(OAuth2AuthorizationResponseType.CODE.getValue());
 		assertThat(params.get(OAuth2ParameterNames.CLIENT_ID)).isEqualTo(clientRegistration.getClientId());
 		String redirectUri = AUTHORIZE_BASE_URL + "/" + clientRegistration.getRegistrationId();
 		assertThat(URLDecoder.decode(params.get(OAuth2ParameterNames.REDIRECT_URI), "UTF-8")).isEqualTo(redirectUri);
 		assertThat(URLDecoder.decode(params.get(OAuth2ParameterNames.SCOPE), "UTF-8"))
-				.isEqualTo(clientRegistration.getScopes().stream().collect(Collectors.joining(" ")));
+			.isEqualTo(clientRegistration.getScopes().stream().collect(Collectors.joining(" ")));
 		assertThat(params.get(OAuth2ParameterNames.STATE)).isNotNull();
 	}
 
@@ -185,7 +186,8 @@ public class OAuth2LoginApplicationTests {
 		WebResponse response = this.followLinkDisableRedirects(clientAnchorElement);
 
 		UriComponents authorizeRequestUriComponents = UriComponentsBuilder
-				.fromUri(URI.create(response.getResponseHeaderValue("Location"))).build();
+			.fromUri(URI.create(response.getResponseHeaderValue("Location")))
+			.build();
 
 		Map<String, String> params = authorizeRequestUriComponents.getQueryParams().toSingleValueMap();
 		String code = "auth-code";
@@ -193,8 +195,11 @@ public class OAuth2LoginApplicationTests {
 		String redirectUri = URLDecoder.decode(params.get(OAuth2ParameterNames.REDIRECT_URI), "UTF-8");
 
 		String authorizationResponseUri = UriComponentsBuilder.fromHttpUrl(redirectUri)
-				.queryParam(OAuth2ParameterNames.CODE, code).queryParam(OAuth2ParameterNames.STATE, state).build()
-				.encode().toUriString();
+			.queryParam(OAuth2ParameterNames.CODE, code)
+			.queryParam(OAuth2ParameterNames.STATE, state)
+			.build()
+			.encode()
+			.toUriString();
 
 		page = this.webClient.getPage(new URL(authorizationResponseUri));
 		this.assertIndexPage(page);
@@ -214,8 +219,11 @@ public class OAuth2LoginApplicationTests {
 		String redirectUri = AUTHORIZE_BASE_URL + "/" + clientRegistration.getRegistrationId();
 
 		String authorizationResponseUri = UriComponentsBuilder.fromHttpUrl(redirectUri)
-				.queryParam(OAuth2ParameterNames.CODE, code).queryParam(OAuth2ParameterNames.STATE, state).build()
-				.encode().toUriString();
+			.queryParam(OAuth2ParameterNames.CODE, code)
+			.queryParam(OAuth2ParameterNames.STATE, state)
+			.build()
+			.encode()
+			.toUriString();
 
 		// Clear session cookie will ensure the 'session-saved'
 		// Authorization Request (from previous request) is not found
@@ -246,8 +254,11 @@ public class OAuth2LoginApplicationTests {
 		String redirectUri = AUTHORIZE_BASE_URL + "/" + clientRegistration.getRegistrationId();
 
 		String authorizationResponseUri = UriComponentsBuilder.fromHttpUrl(redirectUri)
-				.queryParam(OAuth2ParameterNames.CODE, code).queryParam(OAuth2ParameterNames.STATE, state).build()
-				.encode().toUriString();
+			.queryParam(OAuth2ParameterNames.CODE, code)
+			.queryParam(OAuth2ParameterNames.STATE, state)
+			.build()
+			.encode()
+			.toUriString();
 
 		page = this.webClient.getPage(new URL(authorizationResponseUri));
 		assertThat(page.getBaseURL()).isEqualTo(loginErrorPageUrl);
@@ -261,8 +272,9 @@ public class OAuth2LoginApplicationTests {
 	void requestWhenMockOAuth2LoginThenIndex() throws Exception {
 		ClientRegistration clientRegistration = this.clientRegistrationRepository.findByRegistrationId("github");
 		this.mvc.perform(get("/").with(oauth2Login().clientRegistration(clientRegistration)))
-				.andExpect(model().attribute("userName", "user")).andExpect(model().attribute("clientName", "GitHub"))
-				.andExpect(model().attribute("userAttributes", Collections.singletonMap("sub", "user")));
+			.andExpect(model().attribute("userName", "user"))
+			.andExpect(model().attribute("clientName", "GitHub"))
+			.andExpect(model().attribute("userAttributes", Collections.singletonMap("sub", "user")));
 	}
 
 	private void assertLoginPage(HtmlPage page) {
@@ -276,10 +288,10 @@ public class OAuth2LoginApplicationTests {
 		ClientRegistration googleClientRegistration = this.clientRegistrationRepository.findByRegistrationId("google");
 		ClientRegistration githubClientRegistration = this.clientRegistrationRepository.findByRegistrationId("github");
 		ClientRegistration facebookClientRegistration = this.clientRegistrationRepository
-				.findByRegistrationId("facebook");
+			.findByRegistrationId("facebook");
 		ClientRegistration oktaClientRegistration = this.clientRegistrationRepository.findByRegistrationId("okta");
 		ClientRegistration springClientRegistration = this.clientRegistrationRepository
-				.findByRegistrationId("login-client");
+			.findByRegistrationId("login-client");
 
 		String baseAuthorizeUri = AUTHORIZATION_BASE_URI + "/";
 		String googleClientAuthorizeUri = baseAuthorizeUri + googleClientRegistration.getRegistrationId();
@@ -304,12 +316,14 @@ public class OAuth2LoginApplicationTests {
 		DomNodeList<HtmlElement> divElements = page.getBody().getElementsByTagName("div");
 		assertThat(divElements.get(1).asNormalizedText()).contains("User: joeg@springsecurity.io");
 		assertThat(divElements.get(4).asNormalizedText())
-				.contains("You are successfully logged in joeg@springsecurity.io");
+			.contains("You are successfully logged in joeg@springsecurity.io");
 	}
 
 	private HtmlAnchor getClientAnchorElement(HtmlPage page, ClientRegistration clientRegistration) {
-		Optional<HtmlAnchor> clientAnchorElement = page.getAnchors().stream()
-				.filter((e) -> e.asNormalizedText().equals(clientRegistration.getClientName())).findFirst();
+		Optional<HtmlAnchor> clientAnchorElement = page.getAnchors()
+			.stream()
+			.filter((e) -> e.asNormalizedText().equals(clientRegistration.getClientName()))
+			.findFirst();
 
 		return (clientAnchorElement.orElse(null));
 	}
@@ -350,7 +364,9 @@ public class OAuth2LoginApplicationTests {
 
 		private OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> mockAccessTokenResponseClient() {
 			OAuth2AccessTokenResponse accessTokenResponse = OAuth2AccessTokenResponse.withToken("access-token-1234")
-					.tokenType(OAuth2AccessToken.TokenType.BEARER).expiresIn(60 * 1000).build();
+				.tokenType(OAuth2AccessToken.TokenType.BEARER)
+				.expiresIn(60 * 1000)
+				.build();
 
 			OAuth2AccessTokenResponseClient tokenResponseClient = mock(OAuth2AccessTokenResponseClient.class);
 			when(tokenResponseClient.getTokenResponse(any())).thenReturn(accessTokenResponse);

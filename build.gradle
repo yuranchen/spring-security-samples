@@ -1,6 +1,9 @@
+import io.spring.javaformat.gradle.tasks.CheckFormat
+import io.spring.javaformat.gradle.tasks.Format
+
 plugins {
 	id "checkstyle"
-	id "io.spring.javaformat" version "0.0.25"
+	id "io.spring.javaformat" version "0.0.42"
 	id 'io.spring.nohttp' version '0.0.11'
 }
 
@@ -9,7 +12,7 @@ allprojects {
 	apply plugin: 'io.spring.javaformat'
 
 	dependencies {
-		checkstyle "io.spring.javaformat:spring-javaformat-checkstyle:0.0.25"
+		checkstyle "io.spring.javaformat:spring-javaformat-checkstyle:0.0.42"
 	}
 
 	// Ensure every test task has at least a single test
@@ -25,6 +28,31 @@ allprojects {
 	tasks.withType(JavaCompile) {
 		options.compilerArgs.add("-parameters")
 	}
+
+	tasks.matching { it.name == 'formatAot' }.all { task ->
+		task.enabled = false
+	}
+
+	tasks.matching { it.name == 'formatAotTest' }.all { task ->
+		task.enabled = false
+	}
+
+	tasks.matching { it.name == 'checkFormatAot' }.all { task ->
+		task.enabled = false
+	}
+
+	tasks.matching { it.name == 'checkFormatAotTest' }.all { task ->
+		task.enabled = false
+	}
+
+	tasks.matching { it.name == "checkstyleAot" }.all { task ->
+		task.enabled = false
+	}
+
+	tasks.matching { it.name == "checkstyleAotTest" }.all { task ->
+		task.enabled = false
+	}
+
 }
 
 if (hasProperty('buildScan')) {
@@ -47,4 +75,3 @@ tasks.register('runAllTests') {
 		allTestsTasks
 	}
 }
-

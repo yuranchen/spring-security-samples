@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package example;
 
 import org.junit.jupiter.api.Test;
@@ -87,9 +88,10 @@ public class OAuth2ResourceServerControllerTests {
 
 	@Test
 	void messageCanNotBeCreatedWithScopeMessageReadAuthority() throws Exception {
-		this.mvc.perform(post("/message").content("Hello message")
+		this.mvc
+			.perform(post("/message").content("Hello message")
 				.with(opaqueToken().authorities(new SimpleGrantedAuthority("SCOPE_message:read"))))
-				.andExpect(status().isForbidden());
+			.andExpect(status().isForbidden());
 	}
 
 	@Test

@@ -20,19 +20,19 @@ compileTestJava {
 }
 
 dependencies {
-	aspect platform("org.springframework:spring-framework-bom:6.0.7")
-	aspect platform("org.springframework.security:spring-security-bom:6.0.2")
-	aspect "org.springframework.security:spring-security-aspects"
+	aspect platform(libs.org.springframework.spring.framework.bom)
+	aspect platform(libs.org.springframework.security.spring.security.bom)
+	aspect ("org.springframework.security:spring-security-aspects") {
+		exclude(group: "io.micrometer", module: "micrometer-observation")
+	}
 
-	implementation platform("org.springframework:spring-framework-bom:6.0.7")
-	implementation platform("org.springframework.security:spring-security-bom:6.0.2")
-	implementation platform("org.junit:junit-bom:5.10.0")
+	implementation platform(libs.org.springframework.spring.framework.bom)
+	implementation platform(libs.org.springframework.security.spring.security.bom)
+	implementation platform("org.junit:junit-bom:5.10.5")
 
 	implementation "org.springframework.security:spring-security-config"
 
-	runtimeOnly "org.springframework.security:spring-security-aspects"
-
-	testImplementation "org.assertj:assertj-core:3.18.0"
+	testImplementation "org.assertj:assertj-core:3.26.3"
 	testImplementation "org.springframework:spring-test"
 	testImplementation "org.springframework.security:spring-security-test"
 	testImplementation "org.junit.jupiter:junit-jupiter-api"
@@ -42,7 +42,7 @@ dependencies {
 
 tasks.withType(Test).configureEach {
 	useJUnitPlatform()
-	outputs.upToDateWhen { false }
+	
 }
 
 

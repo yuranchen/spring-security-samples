@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2016 the original author or authors.
+ * Copyright 2002-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package example;
 
 import java.io.InputStream;
@@ -60,16 +61,17 @@ public class SecurityConfiguration {
 	@Bean
 	RelyingPartyRegistrationRepository relyingPartyRegistrationRepository() {
 		RelyingPartyRegistration relyingPartyRegistration = RelyingPartyRegistrations
-				.fromMetadataLocation("https://dev-05937739.okta.com/app/exk46xofd8NZvFCpS5d7/sso/saml/metadata")
-				.registrationId("one")
-				.decryptionX509Credentials(
-						(c) -> c.add(Saml2X509Credential.decryption(this.privateKey, relyingPartyCertificate())))
-				.signingX509Credentials(
-						(c) -> c.add(Saml2X509Credential.signing(this.privateKey, relyingPartyCertificate())))
-				.singleLogoutServiceLocation(
-						"https://dev-05937739.okta.com/app/dev-05937739_springgsecuritysaml2idp_1/exk46xofd8NZvFCpS5d7/slo/saml")
-				.singleLogoutServiceResponseLocation("http://localhost:8080/logout/saml2/slo")
-				.singleLogoutServiceBinding(Saml2MessageBinding.POST).build();
+			.fromMetadataLocation("https://dev-05937739.okta.com/app/exk46xofd8NZvFCpS5d7/sso/saml/metadata")
+			.registrationId("one")
+			.decryptionX509Credentials(
+					(c) -> c.add(Saml2X509Credential.decryption(this.privateKey, relyingPartyCertificate())))
+			.signingX509Credentials(
+					(c) -> c.add(Saml2X509Credential.signing(this.privateKey, relyingPartyCertificate())))
+			.singleLogoutServiceLocation(
+					"https://dev-05937739.okta.com/app/dev-05937739_springgsecuritysaml2idp_1/exk46xofd8NZvFCpS5d7/slo/saml")
+			.singleLogoutServiceResponseLocation("http://localhost:8080/logout/saml2/slo")
+			.singleLogoutServiceBinding(Saml2MessageBinding.POST)
+			.build();
 
 		return new InMemoryRelyingPartyRegistrationRepository(relyingPartyRegistration);
 	}

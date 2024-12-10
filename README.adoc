@@ -1,5 +1,7 @@
 image::https://github.com/spring-projects/spring-security-samples/workflows/CI/badge.svg[link=https://github.com/spring-projects/spring-security-samples/actions?query=workflow%3ACI]
 
+image::https://img.shields.io/badge/Revved%20up%20by-Develocity-06A0CE?logo=Gradle&labelColor=02303A["Revved up by Develocity", link="https://ge.spring.io/scans?search.rootProjectNames=spring-security-samples"]
+
 Samples for https://github.com/spring-projects/spring-security
 
 == Samples catalog
@@ -37,6 +39,8 @@ Samples for https://github.com/spring-projects/spring-security
 ** https://github.com/spring-projects/spring-security-samples/tree/main/servlet/spring-boot/java/oauth2/resource-server/opaque[Opaque Token]
 
 ** https://github.com/spring-projects/spring-security-samples/tree/main/servlet/spring-boot/java/oauth2/resource-server/static[Static]
+
+* RestClient - https://github.com/spring-projects/spring-security-samples/tree/main/servlet/spring-boot/java/oauth2/restclient[Spring Boot]
 
 * WebClient - https://github.com/spring-projects/spring-security-samples/tree/main/servlet/spring-boot/java/oauth2/webclient[Spring Boot] | https://github.com/spring-projects/spring-security-samples/tree/main/reactive/webflux/java/oauth2/webclient[WebFlux]
 
